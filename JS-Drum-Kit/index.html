@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta  charset="utf-8">
+    <title> JS Drum Kit </title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="keys">
+        <div data-key="65" class="key">
+            <kbd>A</kbd>
+            <span class="sound"> clap </span>
+        </div>
+        <div data-key="83" class="key">
+            <kbd>S</kbd>
+            <span class="sound"> hihat </span>
+        </div>
+        <div data-key="68" class="key">
+            <kbd>D</kbd>
+            <span class="sound"> kick </span>
+        </div>
+        <div data-key="70" class="key">
+            <kbd>F</kbd>
+            <span class="sound"> openhat </span>
+        </div>
+        <div data-key="71" class="key">
+            <kbd>G</kbd>
+            <span class="sound"> boom </span>
+        </div>
+        <div data-key="72" class="key">
+            <kbd>H</kbd>
+            <span class="sound"> ride </span>
+        </div>
+        <div data-key="74" class="key">
+            <kbd>J</kbd>
+            <span class="sound"> snare </span>
+        </div>
+        <div data-key="75" class="key">
+            <kbd>K</kbd>
+            <span class="sound"> tom </span>
+        </div>
+        <div data-key="76" class="key">
+            <kbd>L</kbd>
+            <span class="sound"> tink </span>
+        </div>
+        <!-- Audios -->
+        <audio id="65" data-key="65" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/clap.wav">Your browser does not support the audio tag.</audio>
+        <audio id="83" data-key="83" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/hihat.wav">Your browser does not support the audio tag.</audio>
+        <audio id="68" data-key="68" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/kick.wav">Your browser does not support the audio tag.</audio>
+        <audio id="70" data-key="70" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/openhat.wav">Your browser does not support the audio tag.</audio>
+        <audio id="71" data-key="71" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/boom.wav">Your browser does not support the audio tag.</audio>
+        <audio id="72" data-key="72" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/ride.wav">Your browser does not support the audio tag.</audio>
+        <audio id="74" data-key="74" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/snare.wav">Your browser does not support the audio tag.</audio>
+        <audio id="75" data-key="75" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/tom.wav">Your browser does not support the audio tag.</audio>
+        <audio id="76" data-key="76" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/tink.wav">Your browser does not support the audio tag.</audio>
+    </div>
+</body>
+
+<script>
+    window.addEventListener("keydown", play);
+    function play(event){
+        //const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`); // so you don't assign IDs
+        const audio = document.getElementById( event.keyCode )
+        const key   = document.querySelector( `.key[data-key="${event.keyCode}"]`);
+        if( !audio ){ return } // stop function if another key is pressed
+        audio.currentTime = 0; // rewind to start
+        audio.play()
+        key.classList.add('playing');
+    }
+    // Remove class
+    function removeTransition(e){
+        if(e.propertyName !== 'transform'){return}
+        // console.log(this); // thios refers to the div in this context, thanks to 'keys'
+        this.classList.remove( 'playing' )
+    }
+    const keys = document.querySelectorAll(".key"); // select all .key elements. Return array
+    keys.forEach( key=>{ key.addEventListener('transitionend', removeTransition)})
+</script>
+
+</html>
