@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>CSS + JS Clock</title>
+    </head>
+
+    <body>
+        <div class="clock">
+            <div class="face">
+                <div class="hand hour"></div>
+                <div class="hand min"></div>
+                <div class="hand sec"></div>
+            </div>
+        </div>
+
+    </body>
+
+    <!-- in docuument CSS-->
+    <style>
+        html {
+            background: rgb(255,124,124);
+            background: linear-gradient(90deg, rgba(255,124,124,1) 0%, rgba(233,193,105,1) 50%, rgba(235,127,38,1) 100%);
+            width: 100%;
+            height: 100%;
+        }
+        body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .clock {
+            border: 5px solid white;
+            border-radius: 50%;
+            width: 400px;
+            height: 400px;
+            box-shadow: 5px 8px #888888;
+        }
+        .face{
+            position: relative;
+            width: 100%;
+            height: 100%;   
+        }
+        .hand{
+            width:50%;
+            background:black;
+            position: absolute;
+            top:50%;
+            transform-origin: 100%;/*right works as well*/
+            transform: rotate(90deg);
+            transition: all 0.5s;
+            transition-timing-function: cubic-bezier(0.1, 2.0, 0.58, 1);
+        }
+        .hour {
+            height:8px;
+        }
+        .min {
+            height:6px;
+        }
+        .sec {
+            height:3px;
+        }
+    </style>
+
+    <script>
+        const secHand = document.querySelector('.sec');
+        const minHand = document.querySelector('.min');
+        const hourHand = document.querySelector('.hour');
+
+        function setDate(){
+            const t = new Date();
+            const sec = t.getSeconds(); // Get current seconds
+            const sec2deg = (sec/60) * 360 + 90; // 90° compensate offset in CSS
+            if( sec2deg === 90 ){
+                secHand.style.transition = 'all 0.001s';
+            } else {
+                secHand.style.transition = 'all 0.05s';
+            }
+            const min = t.getMinutes();
+            const hour = t.getHours();
+            //move hands
+            secHand.style.transform = `rotate(${sec2deg}deg)`;
+            minHand.style.transform = `rotate(${(min/60)*360+90}deg)`;
+            minHand.style.transform = `rotate(${(hour/12)*360+90}deg)`;
+        }
+
+        setInterval(setDate, 1000);
+    </script>
+</html>
