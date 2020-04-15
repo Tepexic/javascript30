@@ -13,15 +13,33 @@
         <div class="controls">
             <span class="controls">
                 <h3>Spacing:</h3>
-                <input type="range" min="1" max="100" value="50" class="slider" id="space-range">
+                <input
+                    type="range"
+                    name="spacing"
+                    min="1"
+                    max="100"
+                    value="10"
+                    class="slider"
+                    id="space-range"
+                    data-units="px"
+                >
             </span>
             <span class="controls">
                 <h3>Blur:</h3>
-                <input type="range" min="1" max="100" value="50" class="slider" id="blur-range">
+                <input
+                    type="range"
+                    name="blur"
+                    min="1"
+                    max="100"
+                    value="10"
+                    class="slider"
+                    id="blur-range"
+                    data-units="px"
+                >
             </span>
             <span class="controls">
                 <h3>Base Color:</h3>
-                <input type="color" class="slider" id="base-color" value="#f0a500">
+                <input type="color" name="base" class="slider" id="base-color" value="#f0a500">
             </span>
             <img src="https://pixabay.com/images/download/wood-anemone-5005120_640.jpg">
         </div>
@@ -29,6 +47,16 @@
 </body>
 
 <script>
+    const inputs = document.querySelectorAll(".controls input");
+    function handleUpdate(){
+        // console.log(this) this is the control
+        let suffix = this.dataset.units || ''; // dataset contains all data-something properties
+        // Edit the document element, because our CSS variables are in :root
+        document.documentElement.style.setProperty(`--${this.name}`, this.value+suffix)
+    }
+    inputs.forEach( c =>{
+        c.addEventListener('change', handleUpdate);
+    })
 </script>
 
 </html>
