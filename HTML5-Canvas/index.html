@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML Canvas</title>
+</head>
+<body>
+    <div class="tools">
+        <input type="color" name="base" class="slider" id="color" value="#f0a500">
+        <input
+            type="range"
+            name="blur"
+            min="1"
+            max="100"
+            value="1"
+            class="slider"
+            id="lineWidth"
+            data-units="px"
+        >
+    </div>
+    <canvas id="draw" width="800" height="800"></canvas>
+
+    <script>
+        const canvas = document.querySelector('#draw')
+        const color  = document.querySelector('#color')
+        const lineWidth  = document.querySelector('#lineWidth')
+
+        // Context is where we draw
+        if( canvas.getContext ) {
+            ctx = canvas.getContext('2d')
+        } else {
+            // Not supported by browser
+            alert( 'Canvas is not supported in your browser' )
+        }
+        // Make it window sized
+        canvas.width =  window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Pincel
+        ctx.lineWidth = lineWidth.value;
+        ctx.strokeStyle = color.value;
+        ctx.lineJoin = 'round'
+        ctx.lineCap = 'round'
+
+        // Flag if user is drawing
+        let isDrawing = false
+        let lastX = 0
+        let lastY = 0
+
+        function draw(e) {
+            if(!isDrawing) {
+                return
+            }
+            ctx.beginPath()
+            // start from
+            ctx.moveTo( lastX, lastY )
+            // move to
+            ctx.lineTo( e.offsetX, e.offsetY )
+            // paint
+            ctx.stroke();
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+        }
+
+        function changeColor(){
+            ctx.strokeStyle = color.value;
+        }
+
+        function changeWidth(){
+            ctx.lineWidth = lineWidth.value;
+        }
+        
+        canvas.addEventListener( 'mousemove', draw )
+        canvas.addEventListener( 'mousedown', (e)=>{
+            [lastX, lastY] = [e.offsetX, e.offsetY ]
+            isDrawing = true
+            })
+
+        canvas.addEventListener( 'mouseup', ()=> isDrawing = false )
+        canvas.addEventListener( 'mouseout', ()=> isDrawing = false )
+
+        color.addEventListener('change', changeColor);
+        lineWidth.addEventListener('change', changeWidth);
+    </script>
+
+    <style>
+        html {
+            background: #120136;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            text-align: center;
+        }
+        canvas { border: 1px solid #035aa6; }
+
+        /* The slider itself */
+        .slider {
+            -webkit-appearance: none;  /* Override default CSS styles */
+            appearance: none;
+            height: 10px; /* Specified height */
+            background: #d3d3d3; /* Grey background */
+            outline: none; /* Remove outline */
+            opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+            -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+            transition: opacity .2s;
+        }
+        /* Mouse-over effects */
+        .slider:hover {
+            opacity: 1; /* Fully shown on mouse-over */
+        }
+        /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none; /* Override default look */
+            appearance: none;
+            width: 12px; /* Set a specific slider handle width */
+            height: 12px; /* Slider handle height */
+            background: #cf7500; 
+            border-color: #cf7500; 
+            cursor: pointer; /* Cursor on hover */
+        }
+        .slider::-moz-range-thumb {
+            width: 12px; /* Set a specific slider handle width */
+            height: 12px; /* Slider handle height */
+            background: #cf7500;
+            border-color: #cf7500; 
+            cursor: pointer; /* Cursor on hover */
+        }
+        input[type="color"] {
+            -webkit-appearance: none;
+            background: #d3d3d3;
+            border: none;
+            border-radius: 10%;
+            height: 20px;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+        }
+    </style>
+</body>
+</html>
