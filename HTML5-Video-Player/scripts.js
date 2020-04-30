@@ -6,6 +6,7 @@ const progessBar = player.querySelector('.progress__filled');
 const toggle = player.querySelector('.toggle');
 const skipButtons = player.querySelectorAll('[data-skip]');
 const ranges = player.querySelectorAll('.player__slider');
+const fullScreen = player.querySelector('#fullScreen');
 
 // Functions
 function togglePlay() {
@@ -41,6 +42,9 @@ function scrub(e){
     video.currentTime = (e.offsetX/progess.offsetWidth)*video.duration;
 }
 
+function handleFullScreen(){
+    video.requestFullscreen();
+}
 // Listeners
 
 // Click play/pause button and video
@@ -63,3 +67,6 @@ let mouseDown = false;
 progess.addEventListener( 'mousemove', (e)=> mouseDown && scrub );
 progess.addEventListener( 'mousedown', ()=> mouseDown=true );
 progess.addEventListener( 'mouseup', ()=> mouseDown=false );
+
+// Full screen
+fullScreen.addEventListener('click', handleFullScreen)
