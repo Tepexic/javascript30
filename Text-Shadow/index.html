@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Shadow</title>
+</head>
+<body>
+
+  <div class="hero">
+    <h1 contenteditable>🔥WOAH!</h1>
+  </div>
+
+  <style>
+  html {
+    color: black;
+    font-family: sans-serif;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+  }
+
+  h1 {
+    text-shadow: 10px 10px 0 rgba(0,0,0,1);
+    font-size: 100px;
+  }
+  </style>
+
+<script>
+  const hero = document.querySelector('.hero');
+  const text = hero.querySelector('h1');
+  const walk = 100;//100px shadow
+
+  function shadow(e) {
+    const height = hero.offsetHeight;
+    const width = hero.offsetWidth;
+    // ES6: const { offsetWidth: width, offsetHeight:height } = hero;
+    let { offsetX: x, offsetY: y } = e;
+
+    // Now, the event could be fired by the h1 or the div
+    // Check that the event comes from the div (hero)
+    // 'this' is always hero, e.target not always
+    if(e.target !== this){
+      // only fires when inside the h1
+      // Add offset left and offset top, to normalize units.
+      // This is because x and y reset inside the h1
+      x = x + e.target.offsetLeft;
+      y = y + e.target.offsetTop;
+      // Now, x and y won't reset!
+    }
+    // Make the shadow between 50 and -50 (100 is the limit we set on 'walk')
+    const xWalk = Math.round( ( x / width * walk ) - (walk / 2) );
+    const yWalk = Math.round( ( y / height * walk ) - (walk / 2) );
+    
+    const c1 = Math.round( ( x / width )*255 );
+    const c2 = Math.round( ( y / height )*255 );
+
+    // Set shadow
+    text.style.textShadow = `
+      ${xWalk}px ${yWalk}px 0 rgba(${c1},${c2},0.5,1),
+      ${xWalk*-1}px ${yWalk}px 0 rgba(0.5,${c1},${c2},1),
+      ${xWalk}px ${yWalk*-1}px 0 rgba(${c1},0.5,${c2},1),
+      ${xWalk*-1}px ${yWalk*-1}px 0 rgba(${c1},${c1},${c2},1)
+      `;
+  }
+
+  hero.addEventListener('mousemove', shadow);
+</script>
+</body>
+</html>
