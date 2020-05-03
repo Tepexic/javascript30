@@ -23,12 +23,18 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
+    <div class="buttons">
+      <button id="deleteAll"> Delete all </button>
+      <button id="checkAll"> Check all </button>
+      <button id="uncheckAll"> Uncheck all </button>
+    </div>
   </div>
 
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = JSON.parse( localStorage.getItem('items') ) || [];
+  var items = JSON.parse( localStorage.getItem('items') ) || [];
+  const buttons = document.querySelectorAll('button');
   
   // submit callback
   function handleSubmint(e) {
@@ -67,7 +73,20 @@
       const index = e.target.dataset.index;
       items[index].done = !items[index].done;
       localStorage.setItem('items', JSON.stringify(items));
-      console.log(items)
+      populateList(items, itemsList);
+    }
+
+    function handleButtons() {
+      console.log(this.id)
+      if(this.id === 'deleteAll') {
+        items = [];
+      } else if(this.id === 'checkAll') {
+        items.map( item=>{item.done=true} )
+      } else {
+        items.map( item=>{item.done=false} )
+      }
+      // Save and re render
+      localStorage.setItem('items', JSON.stringify(items));
       populateList(items, itemsList);
     }
     
@@ -75,6 +94,8 @@
     addItems.addEventListener( 'submit', handleSubmint );
     // Listen for list cliclks
     itemsList.addEventListener( 'click', handleCheck );
+    // Buttons 
+    buttons.forEach( b=> {b.addEventListener( 'click', handleButtons )} );
 
     // Load items on pageload
     populateList( items, itemsList );
